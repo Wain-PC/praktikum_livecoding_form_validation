@@ -6,6 +6,7 @@ const formUser = document.querySelector('.popup__form[name="user"]')
 // Слушатель сабмита формы.
 formNew.addEventListener('submit', handleFormSubmit);
 // Слушатель ввода на полях формы.
+// Используя механизм делегирования событий, слушаем сразу все поля ввода на форме.
 formNew.addEventListener('input', function (event) {
     // Поле ввода, на котором произошло изменение.
     const input = event.target;
@@ -21,6 +22,7 @@ formNew.addEventListener('input', function (event) {
 // Слушатель сабмита формы.
 formUser.addEventListener('submit', handleFormSubmit);
 // Слушатель ввода на полях формы.
+// Используя механизм делегирования событий, слушаем сразу все поля ввода на форме.
 formUser.addEventListener('input', function (event) {
     // Поле ввода, на котором произошло изменение.
     const input = event.target;
