@@ -1,0 +1,10 @@
+@import url(./_save/popup__button_save.css);
+@import url(./_add/popup__button_add.css);
+@import url(./_valid/popup__button_valid.css);
+@import url(./_invalid/popup__button_invalid.css);
+
+.popup__button {
+  width: 100%;
+  height: 50px;
+  margin-top: 24px;
+}

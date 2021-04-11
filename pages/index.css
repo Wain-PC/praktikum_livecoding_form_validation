@@ -1,0 +1,30 @@
+@import url(../vendor/normalize.css);
+@import url(../vendor/fonts.css);
+@import url(../blocks/button/button.css);
+@import url(../blocks/popup/popup.css);
+@import url(../blocks/error/error.css);
+html{
+  height: 100%;
+}
+body {
+  background-color: #000;
+  font-family: Roboto, Arial, sans-serif;
+  height: 100%;
+}
+.container{
+  max-width: 1140px;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items:center;
+  height: 100%;
+}
+.popup{
+  background: #fff;
+  padding: 40px;
+  margin: 100px;
+  width: 400px;
+}

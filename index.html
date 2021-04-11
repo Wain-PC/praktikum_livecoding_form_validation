@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Livecoding. Form Validation</title>
+    <link rel="stylesheet" href="./pages/index.css">
+</head>
+<body>
+<div class="container">
+
+    <!--Форма 1-->
+    <div class="popup">
+        <h3 class="popup__title">Новое место</h3>
+        <form class="popup__form" name="new">
+            <!--Обязательное поле, длина от 3 до 20 символов включительно.-->
+            <input name="name" class="popup__input popup__input_type_name" placeholder="Название" minlength="3" maxlength="20" required>
+            <span class="error"></span>
+            <!--Обязательное поле, должен быть введён URL-->
+            <input type="url" name="link" class="popup__input popup__input_type_link-url" placeholder="Ссылка на картинку" required>
+            <span class="error"></span>
+            <!--По-умолчанию кнопка отключена, т.к. в инпуты ничего не введено.-->
+            <!--Кнопка разблокируется JSом, когда валидация формы пройдёт успешно-->
+            <button disabled type="submit" class="button popup__button popup__button_add popup__button_invalid">Добавить</button>
+        </form>
+    </div>
+
+    <!--Форма 2-->
+    <div class="popup">
+        <h3 class="popup__title">Редактировать данные</h3>
+        <form class="popup__form" name="user">
+            <!--Обязательное поле, должен быть введён e-mail адрес-->
+            <input type="email" name="email" class="popup__input" placeholder="Email" required>
+            <span class="error error_email"></span>
+            <!--Обязательные поля, минимум 8 знаков, значения должны совпадать.-->
+            <input name="password" class="popup__input" placeholder="Введите пароль" required>
+            <input name="password_confirm" class="popup__input" placeholder="Повторите пароль" required minlength="8">
+            <span class="error"></span>
+            <!--По-умолчанию кнопка отключена, т.к. в инпуты ничего не введено.-->
+            <!--Кнопка разблокируется JSом, когда валидация формы пройдёт успешно-->
+            <button disabled type="submit" class="button popup__button popup__button_save popup__button_invalid">Сохранить</button>
+        </form>
+
+    </div>
+</div>
+
+<script src="scripts/forms.js"></script>
+</body>
+</html>

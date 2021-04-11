@@ -1,0 +1,7 @@
+@import url(./_form/popup__close_form.css);
+@import url(./_image/popup__close_image.css);
+
+.popup__close {
+  width: 26px;
+  cursor: pointer;
+}
