@@ -14,17 +14,19 @@ function handleFormSubmit(event) {
     }
 }
 
-function handleFormInput(event) {
+function handleFormInput(event, config) {
     // Поле ввода, на котором произошло событие.
     const input = event.target;
     // Форма - элемент, на котором было *установлено* событие, поэтому используем `event.currentTarget`.
     const form = event.currentTarget;
     // Устанавливаем кастомные тексты ошибок.
     setCustomError(input);
+    // Валидация паролей
+    validatePasswordsMatch(form, config);
     // Записываем текст ошибок в специальные контейнеры под каждым полем.
     setFieldError(input);
     // Включаем или выключаем кнопку отправки формы.
-    setSubmitButtonState(form);
+    setSubmitButtonState(form, config);
 }
 
 /* Функция для копирования текста ошибки из свойства поля ввода в span под ним. */
@@ -37,22 +39,22 @@ function setFieldError(field) {
 }
 
 /* Функция для изменения состояния кнопки отправки формы. */
-function setSubmitButtonState(form) {
+function setSubmitButtonState(form, config) {
     // Найдём кнопку в форме.
-    const button = form.querySelector('.popup__button');
+    const button = form.querySelector(config.button);
     // Проверим, валидна ли форма?
     const isValid = form.checkValidity(); // Форма валидна в целом или нет?
 
     if (isValid) {
         // Если форма валидна, атрибут `disabled` и классы ошибок с кнопки нужно снять.
         button.removeAttribute('disabled');
-        button.classList.add('popup__button_valid');
-        button.classList.remove('popup__button_invalid');
+        button.classList.add(config.buttonValid);
+        button.classList.remove(config.buttonInvalid);
     } else {
         // Если форма НЕ валидно, атрибут `disabled` и классы ошибок на кнопке нужно установить.
         button.setAttribute('disabled', true);
-        button.classList.remove('popup__button_valid');
-        button.classList.add('popup__button_invalid');
+        button.classList.remove(config.buttonValid);
+        button.classList.add(config.buttonInvalid);
     }
 }
 
@@ -79,10 +81,18 @@ function setCustomError(input) {
 }
 
 /* Функция для проверки совпадения паролей в двух полях ввода. */
-function validatePasswordsMatch(form) {
+function validatePasswordsMatch(form, config) {
+    if(!(config.password || config.passwordConfirm)) {
+        return;
+    }
+
     // Находим поля ввода пароля.
-    const inputPassword = form.querySelector('.popup__input[name="password"]');
-    const inputPasswordConfirm = form.querySelector('.popup__input[name="password_confirm"]');
+    const inputPassword = form.querySelector(config.password);
+    const inputPasswordConfirm = form.querySelector(config.passwordConfirm);
+
+    if (!(inputPassword || inputPasswordConfirm)) {
+        return;
+    }
 
     // Сбрасываем кастомную ошибку.
     inputPasswordConfirm.setCustomValidity('');
@@ -94,10 +104,24 @@ function validatePasswordsMatch(form) {
     setFieldError(inputPasswordConfirm);
 }
 
-function enableValidation() {
-    const formNew = document.querySelector('.popup__form[name="new"]');
+function enableValidation(config) {
+    const formNew = document.querySelector(config.form);
     formNew.addEventListener('submit', handleFormSubmit);
-    formNew.addEventListener('input', handleFormInput);
+    formNew.addEventListener('input', (event) => handleFormInput(event, config));
 }
 
-enableValidation();
+enableValidation({
+    form: '.popup__form[name="new"]',
+    button: '.popup__button',
+    buttonValid: 'popup__button_valid',
+    buttonInvalid: 'popup__button_invalid'
+});
+
+enableValidation({
+    form: '.popup__form[name="user"]',
+    button: '.popup__button',
+    buttonValid: 'popup__button_valid',
+    buttonInvalid: 'popup__button_invalid',
+    password: '.popup__input[name="password"]',
+    passwordConfirm: '.popup__input[name="password_confirm"]'
+});
