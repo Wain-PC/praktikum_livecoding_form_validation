@@ -1,43 +1,3 @@
-// Находим обе формы в DOM.
-const formNew = document.querySelector('.popup__form[name="new"]');
-const formUser = document.querySelector('.popup__form[name="user"]')
-
-// Добавляем слушатели на первую форму.
-// Слушатель сабмита формы.
-formNew.addEventListener('submit', handleFormSubmit);
-// Слушатель ввода на полях формы.
-// Используя механизм делегирования событий, слушаем сразу все поля ввода на форме.
-formNew.addEventListener('input', function (event) {
-    // Поле ввода, на котором произошло изменение.
-    const input = event.target;
-    // Устанавливаем кастомные тексты ошибок.
-    setCustomError(input);
-    // Записываем текст ошибок в специальные контейнеры под каждым полем.
-    setFieldError(input);
-    // Включаем или выключаем кнопку отправки формы.
-    setSubmitButtonState(formNew);
-});
-
-// Добавляем слушатели на первую форму.
-// Слушатель сабмита формы.
-formUser.addEventListener('submit', handleFormSubmit);
-// Слушатель ввода на полях формы.
-// Используя механизм делегирования событий, слушаем сразу все поля ввода на форме.
-formUser.addEventListener('input', function (event) {
-    // Поле ввода, на котором произошло изменение.
-    const input = event.target;
-    // Форма, на которую было повешено событие.
-    // Тут можно было бы просто использовать переменную `formUser` из внешнего контекста
-    const form = event.currentTarget;
-    // Устанавливаем кастомные тексты ошибок.
-    setCustomError(input);
-    validatePasswordsMatch(formUser);
-    // Записываем текст ошибок в специальные контейнеры под каждым полем.
-    setFieldError(input);
-    // Включаем или выключаем кнопку отправки формы.
-    setSubmitButtonState(formUser);
-});
-
 /* Функция-коллбэк, обрабатывающая событие отправки формы. */
 function handleFormSubmit(event) {
     event.preventDefault();
@@ -47,11 +7,24 @@ function handleFormSubmit(event) {
     // В любом случае выведем сообщение в консоль.
     const isValid = form.checkValidity();
     if (isValid) {
-        console.log('Форма валидна!');
+        alert('Форма валидна!');
         form.reset();
     } else {
-        console.log('Форма НЕ валидна!');
+        alert('Форма НЕ валидна!');
     }
+}
+
+function handleFormInput(event) {
+    // Поле ввода, на котором произошло событие.
+    const input = event.target;
+    // Форма - элемент, на котором было *установлено* событие, поэтому используем `event.currentTarget`.
+    const form = event.currentTarget;
+    // Устанавливаем кастомные тексты ошибок.
+    setCustomError(input);
+    // Записываем текст ошибок в специальные контейнеры под каждым полем.
+    setFieldError(input);
+    // Включаем или выключаем кнопку отправки формы.
+    setSubmitButtonState(form);
 }
 
 /* Функция для копирования текста ошибки из свойства поля ввода в span под ним. */
@@ -120,3 +93,11 @@ function validatePasswordsMatch(form) {
     // Установим ошибку даже если ввод произошёл на первом поле ввода с паролем.
     setFieldError(inputPasswordConfirm);
 }
+
+function enableValidation() {
+    const formNew = document.querySelector('.popup__form[name="new"]');
+    formNew.addEventListener('submit', handleFormSubmit);
+    formNew.addEventListener('input', handleFormInput);
+}
+
+enableValidation();
