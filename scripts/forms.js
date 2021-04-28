@@ -6,7 +6,7 @@ class FormValidation {
     enableValidation() {
         const formNew = document.querySelector(this._config.form);
         formNew.addEventListener('submit', this._handleFormSubmit);
-        formNew.addEventListener('input', (event) => this._handleFormInput(event, this._config));
+        formNew.addEventListener('input', this._handleFormInput);
     }
 
     /* Функция-коллбэк, обрабатывающая событие отправки формы. */
@@ -25,7 +25,7 @@ class FormValidation {
         }
     }
 
-    _handleFormInput = (event, config) => {
+    _handleFormInput = (event) => {
         // Поле ввода, на котором произошло событие.
         const input = event.target;
         // Форма - элемент, на котором было *установлено* событие, поэтому используем `event.currentTarget`.
@@ -33,11 +33,11 @@ class FormValidation {
         // Устанавливаем кастомные тексты ошибок.
         this._setCustomError(input);
         // Валидация паролей
-        this._validatePasswordsMatch(form, config);
+        this._validatePasswordsMatch(form, this._config);
         // Записываем текст ошибок в специальные контейнеры под каждым полем.
         this._setFieldError(input);
         // Включаем или выключаем кнопку отправки формы.
-        this._setSubmitButtonState(form, config);
+        this._setSubmitButtonState(form, this._config);
     }
 
     /* Функция для копирования текста ошибки из свойства поля ввода в span под ним. */
@@ -50,22 +50,22 @@ class FormValidation {
     }
 
     /* Функция для изменения состояния кнопки отправки формы. */
-    _setSubmitButtonState(form, config) {
+    _setSubmitButtonState(form) {
         // Найдём кнопку в форме.
-        const button = form.querySelector(config.button);
+        const button = form.querySelector(this._config.button);
         // Проверим, валидна ли форма?
         const isValid = form.checkValidity(); // Форма валидна в целом или нет?
 
         if (isValid) {
             // Если форма валидна, атрибут `disabled` и классы ошибок с кнопки нужно снять.
             button.removeAttribute('disabled');
-            button.classList.add(config.buttonValid);
-            button.classList.remove(config.buttonInvalid);
+            button.classList.add(this._config.buttonValid);
+            button.classList.remove(this._config.buttonInvalid);
         } else {
             // Если форма НЕ валидно, атрибут `disabled` и классы ошибок на кнопке нужно установить.
             button.setAttribute('disabled', true);
-            button.classList.remove(config.buttonValid);
-            button.classList.add(config.buttonInvalid);
+            button.classList.remove(this._config.buttonValid);
+            button.classList.add(this._config.buttonInvalid);
         }
     }
 
@@ -92,18 +92,14 @@ class FormValidation {
     }
 
     /* Функция для проверки совпадения паролей в двух полях ввода. */
-    _validatePasswordsMatch(form, config) {
-        if(!(config.password || config.passwordConfirm)) {
+    _validatePasswordsMatch(form) {
+        if(!(this._config.password || this._config.passwordConfirm)) {
             return;
         }
 
         // Находим поля ввода пароля.
-        const inputPassword = form.querySelector(config.password);
-        const inputPasswordConfirm = form.querySelector(config.passwordConfirm);
-
-        if (!(inputPassword || inputPasswordConfirm)) {
-            return;
-        }
+        const inputPassword = form.querySelector(this._config.password);
+        const inputPasswordConfirm = form.querySelector(this._config.passwordConfirm);
 
         // Сбрасываем кастомную ошибку.
         inputPasswordConfirm.setCustomValidity('');
